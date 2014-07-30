@@ -80,17 +80,19 @@
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
       var board = this._currentAttributes;
-      var row = board[rowIndex];
       var queens = 0;
 
-      // count the queens of times queen is found
+      // loop through the row and count the queens that exist
       for ( var i = 0, count = board.n; i < count; i++ ){
+
+        //current row is board[rowIndex][i]
         // if queen found, increment queens
-        if ( row[i] ) queens++;
+        if ( board[rowIndex][i] ) queens++;
       }
 
-      // return if conflict is found, return the number of queens
-      return queens;
+      // return if conflict is found, return true
+      if ( queens > 1) return true;
+      return false;
     },
 
     // test if any rows on this board contain conflicts
@@ -113,12 +115,35 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      return false; // fixme
+      var board = this._currentAttributes;
+      var queen = 0;
+
+      // loop through the column and count the queens that exist
+      for ( var i = 0, count = board.n; i < count; i++){
+
+        //current column is board[i][colInxed]
+        // if queen found, increment queens
+        if ( board[i][colIndex] ) queen++;
+
+      }
+
+      // return if conflict is found, return true
+      if ( queen > 1 ) return true;
+      return false;
+
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      return false; // fixme
+      var board = this._currentAttributes;
+
+      // loop through each column and check if conflict found
+      for ( var i = 0, count = board.n; i < count; i++){
+        if ( this.hasColConflictAt(i) ) return true;
+      }
+
+      // if no conflicts found, end test
+      return false;
     },
 
 
@@ -128,7 +153,30 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var board = this._currentAttributes;
+      var queens = 0;
+
+      // only run if there is anoth element in the next major diagonal
+      if ( board.n - majorDiagonalColumnIndexAtFirstRow > 1 ){
+
+        // loop through the major diagonal and count the queens that exist
+        for ( var i = 0, count = board.n ; i < count ; i++ ){
+
+          //current major diagonal is board[i][majorDiagonalColumnIndexAtFirstRow]
+          // if queen found, increment queens
+          if ( board[i][majorDiagonalColumnIndexAtFirstRow] ) queens++;
+
+          // move to next major diagonal element
+          majorDiagonalColumnIndexAtFirstRow++;
+
+        }
+
+      }
+
+      // return if conflict is found, return true
+      if ( queens > 1 ) return true;
+      return false;
+
     },
 
     // test if any major diagonals on this board contain conflicts
