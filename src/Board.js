@@ -130,7 +130,6 @@
       // return if conflict is found, return true
       if ( queen > 1 ) return true;
       return false;
-
     },
 
     // test if any columns on this board contain conflicts
@@ -160,7 +159,7 @@
       if ( board.n - majorDiagonalColumnIndexAtFirstRow > 1 ){
 
         // loop through the major diagonal and count the queens that exist
-        for ( var i = 0, count = board.n ; i < count ; i++ ){
+        for ( var i = 0, count = board.n; i < count; i++ ){
 
           //current major diagonal is board[i][majorDiagonalColumnIndexAtFirstRow]
           // if queen found, increment queens
@@ -176,12 +175,19 @@
       // return if conflict is found, return true
       if ( queens > 1 ) return true;
       return false;
-
     },
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      return false; // fixme
+      var board = this._currentAttributes;
+
+      // loop through each major diagonal and check if conflict found
+      for ( var i = 0, count = board.n; i < count; i++ ){
+        if ( this.hasMajorDiagonalConflictAt(i) ) return true;
+      }
+
+      // if no conflicts found, end test
+      return false;
     },
 
 
