@@ -155,7 +155,7 @@
       var board = this._currentAttributes;
       var queens = 0;
 
-      // only run if there is anoth element in the next major diagonal
+      // only run if there is another element in the next major diagonal
       if ( board.n - majorDiagonalColumnIndexAtFirstRow > 1 ){
 
         // loop through the major diagonal and count the queens that exist
@@ -197,7 +197,29 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      return false; // fixme
+      var board = this._currentAttributes;
+      var queens = 0;
+
+      // only run if there is another element in the next minor diagonal
+      if ( minorDiagonalColumnIndexAtFirstRow > 0 ){
+
+        // loop through the minor diagonal and count the queens that exist
+        for ( var i = 0, count = board.n; i < count; i++ ){
+
+          //current minor diagonal is board[i][minorDiagonalColumnIndexAtFirstRow]
+          // if queen found, increment queens
+          if ( board[i][minorDiagonalColumnIndexAtFirstRow] ) queens++;
+
+          // move to next minor diagonal element
+          minorDiagonalColumnIndexAtFirstRow--;
+
+        }
+
+      }
+
+      // return if conflict is found, return true
+      if ( queens > 1 ) return true;
+      return false;
     },
 
     // test if any minor diagonals on this board contain conflicts
