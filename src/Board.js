@@ -224,7 +224,15 @@
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
-      return false; // fixme
+      var board = this._currentAttributes;
+
+      // loop through each minor diagonal and check if conflict found
+      for ( var i = 0, count = board.n; i < count; i++ ){
+        if ( this.hasMinorDiagonalConflictAt(i) ) return true;
+      }
+
+      // if no conflicts found, end test
+      return false;
     }
 
     /*--------------------  End of Helper Functions  ---------------------*/
