@@ -79,12 +79,34 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      var board = this._currentAttributes;
+      var queens = 0;
+
+      // loop through each row where current row is board[i]
+      for ( var i = 0, count = board.n; i < count; i++ ){
+
+        // count the queens of times queen is found
+        for ( var j = 0; j < count; j++ ){
+          // if queen found, increment queens
+          if ( board[i][j] ) queens++;
+        }
+
+        // if conflict is found, return true
+        if ( queens > 1 ){
+          return true;
+        // if conflict not found, reset counter and check next row
+        } else {
+          queens = 0;
+        }
+
+      }
+      // if no conflicts found, end test
+      return false;
     },
 
 
