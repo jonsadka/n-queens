@@ -45,35 +45,31 @@ window.findNRooksSolution = function(n) {
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
 window.countNRooksSolutions = function(n, board, rooksLeft) {
 
-  var solutionCount = 0;
+  solutionCount = [];
   board = board || new Board({'n':n});
   if ( rooksLeft === undefined ) rooksLeft = n;
 
-  if ( rooksLeft ){
-
+  // debugger
+  if ( rooksLeft > 0 ){
     // add another rook to the board at all the non-conflicting locations
     for ( var i = 0; i < n; i++ ){
-      for ( var j = 0; j < n; j++){
-        // add rook to next slot and reduce rook count
-        board.attributes[i][j] = 1;
-        rooksLeft--;
-        // if conflict exists in either row or column, remove the rook
-        if ( board.hasRowConflictAt(i) || board.hasColConflictAt(j) ){
-          board.attributes[i][j] = 0;
-          rooksLeft++;
-        // if conflict doesn't exists and rooks are left, call function again
-        // otherqise count the solution
-        } else {
-          debugger
-          if ( rooksLeft > 0){
-            countNRooksSolutions(n, board, rooksLeft);
-          } else {
-            solutionCount++;
+      for ( var j = 0; j < n; j++ ){
+        if ( board.attributes[i][j] !== 1 ){
+          // add rook to next slot, reduce rook count, and analyze new board if no conflicts exist
+          board.attributes[i][j] = 1;
+          rooksLeft--
+          if ( !board.hasRowConflictAt(i) && !board.hasColConflictAt(j) ){
+            if ( countNRooksSolutions(n, board, rooksLeft) === true ){
+              solutionCount.push(board);
+            };
           }
+          board.attributes[i][j] = 0;
+          rooksLeft++
         }
-      board.attributes[i].map(Number.prototype.valueOf, 0);
       }
     }
+  } else {
+    return true;
   }
 
   // // remove solutions for dupicates due to replication of diagonals
@@ -83,8 +79,8 @@ window.countNRooksSolutions = function(n, board, rooksLeft) {
   //   solutionCount = solutionCount - 2;
   // }
 
-  console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
-  return solutionCount;
+  console.log('Number of solutions for ' + n + ' rooks:', solutionCount.length);
+  return solutionCount.length;
 };
 
 
