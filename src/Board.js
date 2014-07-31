@@ -88,10 +88,11 @@
         //current row is board[rowIndex][i]
         // if queen found, increment queens
         if ( board[rowIndex][i] ) queens++;
+
+        // return if conflict is found, return true
+        if ( queens > 1) return true;
       }
 
-      // return if conflict is found, return true
-      if ( queens > 1) return true;
       return false;
     },
 
