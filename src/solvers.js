@@ -58,7 +58,7 @@ window.countNRooksSolutions = function(n, board, currentRow, rooksLeft) {
       currentRow++;
       // analyze board
       if ( !board.hasAnyColConflicts() ){
-        solutionCount = solutionCount + countNRooksSolutions(n, board, currentRow, rooksLeft );
+        solutionCount = solutionCount + countNRooksSolutions(n, board, currentRow, rooksLeft);
       }
       // reset board
       currentRow--;
@@ -85,10 +85,10 @@ window.findNQueensSolution = function(n) {
   // loops through each row and column
   for ( var i = 0 ; i < n ; i++ ){
     for ( var j = 0; j < n ; j++ ){
-      // add rook to next slot and reduce rook count
+      // add queen to next slot and reduce queen count
       solution.attributes[i][j] = 1;
       queensLeft--;
-      // if conflict exists in either row or column, remove the rook
+      // if conflict exists in either row or column, remove the queen
       if ( solution.hasRowConflictAt(i) || solution.hasColConflictAt(j) || solution.hasMajorDiagonalConflictAt(j) || solution.hasMinorDiagonalConflictAt(j) ){
         solution.attributes[i][j] = 0;
         queensLeft++;
@@ -105,8 +105,32 @@ window.findNQueensSolution = function(n) {
 
 
 // return the number of nxn chessboards that exist, with n queens placed such that none of them can attack each other
-window.countNQueensSolutions = function(n) {
-  var solutionCount = undefined; //fixme
+window.countNQueensSolutions = function(n, board, currentRow, queensLeft) {
+  var solutionCount = 0;
+  board = board || new Board({'n':n});
+  currentRow = currentRow || 0;
+  if ( queensLeft === undefined ) queensLeft = n;
+
+  if ( queensLeft > 0 ){
+    for ( var col = 0; col < n; col++ ){
+      // put queen in next avaiable spot
+      board.attributes[currentRow][col] = 1;
+      queensLeft--;
+      currentRow++;
+      // analyze board
+      // debugger
+      if ( !board.hasAnyColConflicts() && !board.hasAnyMajorDiagonalConflicts() && !board.hasAnyMinorDiagonalConflicts() ){
+        solutionCount = solutionCount + countNQueensSolutions(n, board, currentRow, queensLeft);
+      }
+      // reset board
+      currentRow--;
+      board.attributes[currentRow][col] = 0;
+      queensLeft++;
+    }
+  } else {
+    // if no queens left increment the solution
+    solutionCount++;
+  }
 
   console.log('Number of solutions for ' + n + ' queens:', solutionCount);
   return solutionCount;

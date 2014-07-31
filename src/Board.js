@@ -175,9 +175,10 @@
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
       var board = this.attributes;
+      var count = board.n;
 
       // loop through each major diagonal and check if conflict found
-      for ( var i = 0, count = board.n; i < count; i++ ){
+      for ( var i = 0 - (count - 2); i < count; i++ ){
         if ( this.hasMajorDiagonalConflictAt(i) ) return true;
       }
 
@@ -215,9 +216,10 @@
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
       var board = this.attributes;
+      var count = board.n;
 
       // loop through each minor diagonal and check if conflict found
-      for ( var i = 0, count = board.n; i < count; i++ ){
+      for ( var i = 0; i < count + (count - 2); i++ ){
         if ( this.hasMinorDiagonalConflictAt(i) ) return true;
       }
 
