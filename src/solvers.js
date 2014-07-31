@@ -47,7 +47,7 @@ window.countNRooksSolutions = function(n, board, rooksLeft) {
 
   var solutionCount = 0;
   board = board || new Board({'n':n});
-  if ( rooksLeft === undefined) rooksLeft = n;
+  if ( rooksLeft === undefined ) rooksLeft = n;
 
   if ( rooksLeft ){
 
@@ -64,17 +64,16 @@ window.countNRooksSolutions = function(n, board, rooksLeft) {
         // if conflict doesn't exists and rooks are left, call function again
         // otherqise count the solution
         } else {
-          // debugger
+          debugger
           if ( rooksLeft > 0){
             countNRooksSolutions(n, board, rooksLeft);
           } else {
             solutionCount++;
           }
         }
-
+      board.attributes[i].map(Number.prototype.valueOf, 0);
       }
     }
-
   }
 
   // // remove solutions for dupicates due to replication of diagonals
