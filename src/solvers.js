@@ -57,17 +57,17 @@ window.countNRooksSolutions = function(n, board, currentRow, rooksLeft) {
       rooksLeft--;
       currentRow++;
       // analyze board
-      solutionCount = solutionCount + countNRooksSolutions(n, board, currentRow, rooksLeft );
+      if ( !board.hasAnyColConflicts() ){
+        solutionCount = solutionCount + countNRooksSolutions(n, board, currentRow, rooksLeft );
+      }
       // reset board
       currentRow--;
       board.attributes[currentRow][col] = 0;
       rooksLeft++;
     }
   } else {
-    // if no rooks left and no conflicts, increment the solutioncount
-    if ( !board.hasAnyColConflicts() ){
-      solutionCount++;
-    }
+    // if no rooks left increment the solution
+    solutionCount++;
   }
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
