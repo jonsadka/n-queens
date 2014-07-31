@@ -19,27 +19,22 @@ window.findNRooksSolution = function(n) {
   var solution = new Board({'n':n});
   var rooksLeft = n;
 
-  // loops through each row
+  // loops through each row and column
   for ( var i = 0 ; i < n ; i++ ){
+    for ( var j = 0; j < n ; j++ ){
+      // add rook to next slot and reduce rook count
+      solution.attributes[i][j] = 1;
+      rooksLeft--;
+      // if conflict exists in either row or column, remove the rook
+      if ( solution.hasRowConflictAt(i) || solution.hasColConflictAt(j) ){
+        solution.attributes[i][j] = 0;
+        rooksLeft++;
+      }
 
-    // if no conflict in row, continue
-    if ( !solution.hasRowConflictAt(i) ){
-      for ( var j = 0; j < n ; j++ ){
-
-        // add rook to next slot
-        solution.attributes[i][j] = 1;
-        rooksLeft--;
-        // if conflict in column, remove the rook
-        if ( solution.hasRowConflictAt(i) || solution.hasColConflictAt(j) ){
-          solution.attributes[i][j] = 0;
-          rooksLeft++;
-        }
-
-        // when no rooks left, return solution
-        if ( !rooksLeft ){
-          console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-          return solution.attributes;
-        }
+      // when no rooks left, return solution
+      if ( !rooksLeft ){
+        console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+        return solution.attributes;
       }
     }
   }
@@ -48,43 +43,46 @@ window.findNRooksSolution = function(n) {
 
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
-window.countNRooksSolutions = function(n) {
+window.countNRooksSolutions = function(n, board, rooksLeft) {
 
-  // create solution
   var solutionCount = 0;
-  var board = board || new Board({'n':1});
-  var rooksLeft = n;
+  board = board || new Board({'n':n});
+  if ( rooksLeft === undefined) rooksLeft = n;
 
-  // global function that grows the board by one row and column of zeroes
-  var growBoard = function(board){
-    index = board.attributes.n;
-    board.attributes[index] = [];
-    for ( var i = 0; i < index; i++ ){
-      board.attributes[i][index] = 0;
-      board.attributes[index][i] = 0;
-    }
-    board.attributes[index][index] = 0;
-    board.attributes.n++;
-    return board;
-  };
-
-  // place rooks at non-conflict locations
-  // reduce rook count
-
-  // keep adding rows and columns up-down/left-right if rooks are left
   if ( rooksLeft ){
-    // grow the board by one row and column
-    growBoard(board);
-    // add rooks at all available locations, subtract from rookcount, and call recursion on each new board
+
+    // add another rook to the board at all the non-conflicting locations
+    for ( var i = 0; i < n; i++ ){
+      for ( var j = 0; j < n; j++){
+        // add rook to next slot and reduce rook count
+        board.attributes[i][j] = 1;
+        rooksLeft--;
+        // if conflict exists in either row or column, remove the rook
+        if ( board.hasRowConflictAt(i) || board.hasColConflictAt(j) ){
+          board.attributes[i][j] = 0;
+          rooksLeft++;
+        // if conflict doesn't exists and rooks are left, call function again
+        // otherqise count the solution
+        } else {
+          // debugger
+          if ( rooksLeft > 0){
+            countNRooksSolutions(n, board, rooksLeft);
+          } else {
+            solutionCount++;
+          }
+        }
+
+      }
+    }
 
   }
 
-  // remove solutions for dupicates due to replication of diagonals
-  if ( n === 2 ){
-    solutionCount = solutionCount - 1;
-  } else if ( n > 2 ){
-    solutionCount = solutionCount - 2;
-  }
+  // // remove solutions for dupicates due to replication of diagonals
+  // if ( n === 2 ){
+  //   solutionCount = solutionCount - 1;
+  // } else if ( n > 2 ){
+  //   solutionCount = solutionCount - 2;
+  // }
 
   console.log('Number of solutions for ' + n + ' rooks:', solutionCount);
   return solutionCount;
